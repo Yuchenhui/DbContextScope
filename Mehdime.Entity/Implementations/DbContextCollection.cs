@@ -29,24 +29,25 @@ namespace Mehdime.Entity
     /// </summary>
     public class DbContextCollection : IDbContextCollection
     {
-        private Dictionary<Type, DbContext> _initializedDbContexts;
+        private Dictionary<string, DbContext> _initializedDbContexts;
         private Dictionary<DbContext, DbContextTransaction> _transactions; 
         private IsolationLevel? _isolationLevel;
         private readonly IDbContextFactory _dbContextFactory;
         private bool _disposed;
         private bool _completed;
         private bool _readOnly;
+        private string _site;
 
-        internal Dictionary<Type, DbContext> InitializedDbContexts { get { return _initializedDbContexts; } }
+        internal Dictionary<string, DbContext> InitializedDbContexts { get { return _initializedDbContexts; } }
 
-        public DbContextCollection(bool readOnly = false, IsolationLevel? isolationLevel = null, IDbContextFactory dbContextFactory = null)
+        public DbContextCollection(bool readOnly = false, IsolationLevel? isolationLevel = null, IDbContextFactory dbContextFactory = null,string site="")
         {
             _disposed = false;
             _completed = false;
 
-            _initializedDbContexts = new Dictionary<Type, DbContext>();
+            _initializedDbContexts = new Dictionary<string, DbContext>();
             _transactions = new Dictionary<DbContext, DbContextTransaction>();
-
+            _site = site;
             _readOnly = readOnly;
             _isolationLevel = isolationLevel;
             _dbContextFactory = dbContextFactory;
@@ -57,15 +58,15 @@ namespace Mehdime.Entity
             if (_disposed)
                 throw new ObjectDisposedException("DbContextCollection");
 
-            var requestedType = typeof(TDbContext);
+            var requestedType =$"{typeof(TDbContext).FullName}-{_site}" ;
 
             if (!_initializedDbContexts.ContainsKey(requestedType))
             {
                 // First time we've been asked for this particular DbContext type.
                 // Create one, cache it and start its database transaction if needed.
                 var dbContext = _dbContextFactory != null
-                    ? _dbContextFactory.CreateDbContext<TDbContext>()
-                    : Activator.CreateInstance<TDbContext>();
+                    ? _dbContextFactory.CreateDbContext<TDbContext>(_site)
+                    : (TDbContext)Activator.CreateInstance(typeof(TDbContext), _site);
 
                 _initializedDbContexts.Add(requestedType, dbContext);
 
@@ -81,7 +82,7 @@ namespace Mehdime.Entity
                 }
             }
 
-            return _initializedDbContexts[requestedType]  as TDbContext;
+            return _initializedDbContexts[requestedType] as TDbContext;
         }
 
         public int Commit()

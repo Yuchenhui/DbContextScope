@@ -38,7 +38,7 @@ namespace Numero3.EntityFramework.Demo.BusinessLogicServices
 			 */
 			using (var dbContextScope = _dbContextScopeFactory.CreateReadOnly())
 			{
-				var dbContext = dbContextScope.DbContexts.Get<UserManagementDbContext>();
+				var dbContext = dbContextScope.DbContexts.Get<CommonDbContext>();
 				var user = dbContext.Users.Find(userId);
 
 				if (user == null)
@@ -52,7 +52,7 @@ namespace Numero3.EntityFramework.Demo.BusinessLogicServices
 		{
 			using (var dbContextScope = _dbContextScopeFactory.CreateReadOnly())
 			{
-				var dbContext = dbContextScope.DbContexts.Get<UserManagementDbContext>();
+				var dbContext = dbContextScope.DbContexts.Get<CommonDbContext>();
 				return dbContext.Users.Where(u => userIds.Contains(u.Id)).ToList();
 			}
 		}

@@ -48,7 +48,7 @@ namespace Numero3.EntityFramework.Demo.BusinessLogicServices
 			// guaranteed to get persisted regardless of what happens after this method has completed.
 			using (var dbContextScope = _dbContextScopeFactory.Create(DbContextScopeOption.ForceCreateNew))
 			{
-				var dbContext = dbContextScope.DbContexts.Get<UserManagementDbContext>();
+				var dbContext = dbContextScope.DbContexts.Get<CommonDbContext>();
 				var user = dbContext.Users.Find(userId);
 
 				if (user == null)

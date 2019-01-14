@@ -13,10 +13,12 @@ namespace Mehdime.Entity
     public class DbContextScopeFactory : IDbContextScopeFactory
     {
         private readonly IDbContextFactory _dbContextFactory;
+        private readonly string _site;
 
-        public DbContextScopeFactory(IDbContextFactory dbContextFactory = null)
+        public DbContextScopeFactory(IDbContextFactory dbContextFactory = null,string site=null)
         {
             _dbContextFactory = dbContextFactory;
+            _site = site;
         }
 
         public IDbContextScope Create(DbContextScopeOption joiningOption = DbContextScopeOption.JoinExisting)
@@ -25,7 +27,7 @@ namespace Mehdime.Entity
                 joiningOption: joiningOption, 
                 readOnly: false, 
                 isolationLevel: null, 
-                dbContextFactory: _dbContextFactory);
+                dbContextFactory: _dbContextFactory,site: _site);
         }
 
         public IDbContextReadOnlyScope CreateReadOnly(DbContextScopeOption joiningOption = DbContextScopeOption.JoinExisting)
@@ -33,7 +35,7 @@ namespace Mehdime.Entity
             return new DbContextReadOnlyScope(
                 joiningOption: joiningOption, 
                 isolationLevel: null, 
-                dbContextFactory: _dbContextFactory);
+                dbContextFactory: _dbContextFactory,site:_site);
         }
 
         public IDbContextScope CreateWithTransaction(IsolationLevel isolationLevel)
@@ -42,7 +44,7 @@ namespace Mehdime.Entity
                 joiningOption: DbContextScopeOption.ForceCreateNew, 
                 readOnly: false, 
                 isolationLevel: isolationLevel, 
-                dbContextFactory: _dbContextFactory);
+                dbContextFactory: _dbContextFactory, site: _site);
         }
 
         public IDbContextReadOnlyScope CreateReadOnlyWithTransaction(IsolationLevel isolationLevel)
@@ -50,7 +52,7 @@ namespace Mehdime.Entity
             return new DbContextReadOnlyScope(
                 joiningOption: DbContextScopeOption.ForceCreateNew, 
                 isolationLevel: isolationLevel, 
-                dbContextFactory: _dbContextFactory);
+                dbContextFactory: _dbContextFactory, site: _site);
         }
 
         public IDisposable SuppressAmbientContext()

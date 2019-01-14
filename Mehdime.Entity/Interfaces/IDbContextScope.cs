@@ -98,5 +98,6 @@ namespace Mehdime.Entity
         /// Save the scope instead.
         /// </summary>
         IDbContextCollection DbContexts { get; }
+
     }
 }

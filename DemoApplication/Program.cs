@@ -13,7 +13,7 @@ namespace Numero3.EntityFramework.Demo
 		static void Main(string[] args)
 		{
 			//-- Poor-man DI - build our dependencies by hand for this demo
-			var dbContextScopeFactory = new DbContextScopeFactory();
+			var dbContextScopeFactory = new DbContextScopeFactory(site:"bak");
 			var ambientDbContextLocator = new AmbientDbContextLocator();
 			var userRepository = new UserRepository(ambientDbContextLocator);
 
@@ -104,7 +104,7 @@ namespace Numero3.EntityFramework.Demo
 
 				using (var parentScope = dbContextScopeFactory.Create())
 				{
-					var parentDbContext = parentScope.DbContexts.Get<UserManagementDbContext>();
+					var parentDbContext = parentScope.DbContexts.Get<CommonDbContext>();
 
 					// Load John in the parent DbContext
 					var john = parentDbContext.Users.Find(johnSpec.Id);

@@ -30,15 +30,15 @@ namespace Mehdime.Entity
 
         public IDbContextCollection DbContexts { get { return _dbContexts; } }
 
-        public DbContextScope(IDbContextFactory dbContextFactory = null) :
-            this(joiningOption: DbContextScopeOption.JoinExisting, readOnly: false, isolationLevel: null, dbContextFactory: dbContextFactory)
+        public DbContextScope(IDbContextFactory dbContextFactory = null, string site = null) :
+            this(joiningOption: DbContextScopeOption.JoinExisting, readOnly: false, isolationLevel: null, dbContextFactory: dbContextFactory,site:site)
         {}
 
-        public DbContextScope(bool readOnly, IDbContextFactory dbContextFactory = null)
-            : this(joiningOption: DbContextScopeOption.JoinExisting, readOnly: readOnly, isolationLevel: null, dbContextFactory: dbContextFactory)
+        public DbContextScope(bool readOnly, IDbContextFactory dbContextFactory = null, string site = null)
+            : this(joiningOption: DbContextScopeOption.JoinExisting, readOnly: readOnly, isolationLevel: null, dbContextFactory: dbContextFactory, site: site)
         {}
 
-        public DbContextScope(DbContextScopeOption joiningOption, bool readOnly, IsolationLevel? isolationLevel, IDbContextFactory dbContextFactory = null)
+        public DbContextScope(DbContextScopeOption joiningOption, bool readOnly, IsolationLevel? isolationLevel, IDbContextFactory dbContextFactory = null,string site=null)
         {
             if (isolationLevel.HasValue && joiningOption == DbContextScopeOption.JoinExisting)
                 throw new ArgumentException("Cannot join an ambient DbContextScope when an explicit database transaction is required. When requiring explicit database transactions to be used (i.e. when the 'isolationLevel' parameter is set), you must not also ask to join the ambient context (i.e. the 'joinAmbient' parameter must be set to false).");
@@ -61,7 +61,7 @@ namespace Mehdime.Entity
             else
             {
                 _nested = false;
-                _dbContexts = new DbContextCollection(readOnly, isolationLevel, dbContextFactory);
+                _dbContexts = new DbContextCollection(readOnly, isolationLevel, dbContextFactory, site);
             }
 
             SetAmbientScope(this);
