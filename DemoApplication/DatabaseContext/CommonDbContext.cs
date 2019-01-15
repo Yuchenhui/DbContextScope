@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Reflection;
+using Mehdime.Entity;
 using Numero3.EntityFramework.Demo.DomainModel;
 
 namespace Numero3.EntityFramework.Demo.DatabaseContext
@@ -9,10 +10,10 @@ namespace Numero3.EntityFramework.Demo.DatabaseContext
 		// Map our 'User' model by convention
 		public DbSet<User> Users { get; set; }
 
-        public CommonDbContext() : base(new FocusSite().Default().DbConnectMain)
+        public CommonDbContext() : base(SiteSettingsExtension.Instance().GetCurrentConnect())
 		{}
 
-	    public CommonDbContext(string site) : base(SiteDic.GetFocusSite(site).DbConnectMain)
+	    public CommonDbContext(string site) : base(SiteSettingsExtension.Instance().GetDbConnect(site))
 	    {
 
 	    }

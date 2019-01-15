@@ -1,25 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Numero3.EntityFramework.Demo.DatabaseContext
 {
 
     public class FocusSite
     {
+        [XmlAttribute("Key")]
         public string Key { get; set; }
+        [XmlAttribute("Name")]
         public string Name { get; set; }
+        [XmlAttribute("Url")]
         public string Url { get; set; }
+        [XmlAttribute("SubDomain")]
         public string SubDomain { get; set; }
+        [XmlAttribute("Domain")]
         public string Domain { get; set; }
+        [XmlAttribute("Protocol")]
         public string Protocol { get; set; }
+        [XmlAttribute("Server")]
         public string Server { get; set; }
+        [XmlAttribute("IsClassicCba")]
         public bool IsClassicCba { get; set; }
-
+        [XmlElement("DbConnectMain")]
         public string DbConnectMain { get; set; }
+        [XmlElement("DbConnectCache")]
         public string DbConnectCache { get; set; }
 
         public FocusSite Default()

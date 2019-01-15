@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,7 +56,6 @@
     <Compile Include="BusinessLogicServices\UserCreditScoreService.cs" />
     <Compile Include="BusinessLogicServices\UserEmailService.cs" />
     <Compile Include="CommandModel\UserCreationSpec.cs" />
-    <Compile Include="DatabaseContext\SiteDic.cs" />
     <Compile Include="DatabaseContext\UserFluentMap.cs" />
     <Compile Include="DatabaseContext\CommonDbContext.cs" />
     <Compile Include="DomainModel\User.cs" />
