@@ -11,10 +11,10 @@ namespace Mehdime.Entity
 {
     public class AmbientDbContextLocator : IAmbientDbContextLocator
     {
-        public TDbContext Get<TDbContext>() where TDbContext : DbContext
+        public TDbContext Get<TDbContext>(string site=null) where TDbContext : DbContext
         {
             var ambientDbContextScope = DbContextScope.GetAmbientScope();
-            return ambientDbContextScope?.DbContexts.Get<TDbContext>();
+            return ambientDbContextScope?.DbContexts.Get<TDbContext>(site);
         }
     }
 }

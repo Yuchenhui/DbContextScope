@@ -12,32 +12,22 @@ namespace Mehdime.Entity
 
         public static SiteSettingsCollection Instance()
         {
-            if (_sites== null || _sites.Count == 0)
-            {
-                _sites = new SiteSettingsCollection();
-                var coll = (SiteSettingsSection)ConfigurationManager.GetSection("siteSettings");
-                _sites = coll.KeyValues;
-            }
+            if (_sites != null && _sites.Count != 0) return _sites;
+            _sites = new SiteSettingsCollection();
+            var coll = (SiteSettingsSection)ConfigurationManager.GetSection("siteSettings");
+            _sites = coll.KeyValues;
             return _sites;
         }
-
-
     }
 
     public class SiteSettingsSection : ConfigurationSection  
     {
-        private static readonly ConfigurationProperty s_property
+        private static readonly ConfigurationProperty SProperty
             = new ConfigurationProperty(string.Empty, typeof(SiteSettingsCollection), null,
                                             ConfigurationPropertyOptions.IsDefaultCollection);
 
         [ConfigurationProperty("", Options = ConfigurationPropertyOptions.IsDefaultCollection)]
-        public SiteSettingsCollection KeyValues
-        {
-            get
-            {
-                return (SiteSettingsCollection)base[s_property];
-            }
-        }
+        public SiteSettingsCollection KeyValues => (SiteSettingsCollection)base[SProperty];
     }
 
 
@@ -49,13 +39,7 @@ namespace Mehdime.Entity
         public SiteSettingsCollection() : base(StringComparer.OrdinalIgnoreCase) 
         {
         }
-        public new SiteSettings this[string name]
-        {
-            get
-            {
-                return (SiteSettings)base.BaseGet(name);
-            }
-        }
+        public new SiteSettings this[string name] => (SiteSettings)base.BaseGet(name);
 
         public string GetCurrentConnect()
         {
@@ -76,6 +60,10 @@ namespace Mehdime.Entity
 
         public string GetDbConnect(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                return GetCurrentConnect();
+            }
             string conn;
             if (_connDic == null)
             {
@@ -122,40 +110,39 @@ namespace Mehdime.Entity
         [ConfigurationProperty("key", IsRequired = true)]
         public string Key
         {
-            get { return this["key"].ToString(); }
-            set { this["key"] = value; }
+            get => this["key"].ToString();
+            set => this["key"] = value;
         }
 
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name
         {
-            get { return this["name"].ToString(); }
-            set { this["name"] = value; }
+            get => this["name"].ToString();
+            set => this["name"] = value;
         }
         [ConfigurationProperty("url", IsRequired = true)]
         public string Url
         {
-            get { return this["url"].ToString(); }
-            set { this["url"] = value; }
-
+            get => this["url"].ToString();
+            set => this["url"] = value;
         }
         [ConfigurationProperty("isCurrent", IsRequired = true)]
         public bool IsCurrent
         {
-            get { return (bool)this["isCurrent"]; }
-            set { this["isCurrent"] = value; }
+            get => (bool)this["isCurrent"];
+            set => this["isCurrent"] = value;
         }
         [ConfigurationProperty("isClassicCba", IsRequired = true)]
         public bool IsClassicCba
         {
-            get { return (bool)this["isClassicCba"]; }
-            set { this["isClassicCba"] = value; }
+            get => (bool)this["isClassicCba"];
+            set => this["isClassicCba"] = value;
         }
         [ConfigurationProperty("connection", IsRequired = true)]
         public string Connection
         {
-            get { return this["connection"].ToString(); }
-            set { this["connection"] = value; }
+            get => this["connection"].ToString();
+            set => this["connection"] = value;
         }
         
     }
