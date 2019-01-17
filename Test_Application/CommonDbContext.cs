@@ -1,9 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Reflection;
 using Mehdime.Entity;
-using Numero3.EntityFramework.Demo.DomainModel;
 
-namespace Numero3.EntityFramework.Demo.DatabaseContext
+namespace Test_Application
 {
 	public class CommonDbContext : DbContext
 	{
@@ -12,10 +11,10 @@ namespace Numero3.EntityFramework.Demo.DatabaseContext
 
         public DbSet<Product> Products { get; set; }
 
-        public CommonDbContext() : base(SiteSettingsExtension.Instance().GetCurrentConnect())
+        public CommonDbContext() : base()
 		{}
 
-	    public CommonDbContext(string site) : base(SiteSettingsExtension.Instance().GetDbConnect(site))
+	    public CommonDbContext(string connect) : base(connect)
 	    {
 
 	    }

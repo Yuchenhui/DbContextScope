@@ -58,15 +58,31 @@ namespace Mehdime.Entity
             if (_disposed)
                 throw new ObjectDisposedException("DbContextCollection");
 
-            var requestedType =$"{typeof(TDbContext).FullName}-{_site}" ;
+            var requestedType = $"{typeof(TDbContext).FullName}";
+            if (!string.IsNullOrEmpty(_site))
+            {
+                requestedType += $"-{_site}";
+            }
 
             if (!_initializedDbContexts.ContainsKey(requestedType))
             {
+                TDbContext dbContext;
                 // First time we've been asked for this particular DbContext type.
                 // Create one, cache it and start its database transaction if needed.
-                var dbContext = _dbContextFactory != null
-                    ? _dbContextFactory.CreateDbContext<TDbContext>(_site)
-                    : (TDbContext)Activator.CreateInstance(typeof(TDbContext), _site);
+                if (!string.IsNullOrEmpty(_site))
+                {
+                    var connect = SiteSettingsExtension.Instance().GetDbConnect(_site);
+                    dbContext = _dbContextFactory != null
+                        ? _dbContextFactory.CreateDbContext<TDbContext>(connect)
+                        : (TDbContext) Activator.CreateInstance(typeof(TDbContext), connect);
+                }
+                else
+                {
+                    dbContext = _dbContextFactory != null
+                        ? _dbContextFactory.CreateDbContext<TDbContext>()
+                        : (TDbContext) Activator.CreateInstance(typeof(TDbContext));
+                }
+
 
                 _initializedDbContexts.Add(requestedType, dbContext);
 

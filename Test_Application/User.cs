@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Numero3.EntityFramework.Demo.DomainModel
+namespace Test_Application
 {
 	// Anemic model to keep this demo application simple.
 	public class User
